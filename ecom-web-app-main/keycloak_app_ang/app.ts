@@ -1,14 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import Keycloak, { KeycloakProfile } from 'keycloak-js';
-
+import {Component, inject, OnInit, signal} from '@angular/core';
+import Keycloak, {KeycloakProfile} from 'keycloak-js';
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  templateUrl: './app.html',
   standalone: false,
-  styleUrl: './app.component.css'
+  styleUrl: './app.css'
 })
-export class AppComponent implements OnInit {
-  title = 'ecom-web-app';
+export class App  implements OnInit{
+  protected readonly title = signal('ecom-app-angular');
 
   private readonly keycloak = inject(Keycloak);
 
@@ -18,9 +17,10 @@ export class AppComponent implements OnInit {
     if (this.keycloak.authenticated) {
       try {
         const userProfile = await this.keycloak.loadUserProfile();
+
         this.profile.set(userProfile);
       } catch (error) {
-        console.error('Error loading profile', error);
+        console.error('Erreur lors du chargement du profil', error);
       }
     }
   }
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  handleLogout() {
+   handleLogout() {
     this.keycloak.logout({
       redirectUri: window.location.origin
     });
